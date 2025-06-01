@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vps-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vps-app
+  template:
+    metadata:
+      labels:
+        app: vps-app
+    spec:
+      containers:
+      - name: vps-app
+        image: shamodha/vps-app:latest
+        ports:
+        - containerPort: 8080
