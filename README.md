@@ -67,8 +67,86 @@ docker push shamodha/vps-app:latest
 
 ## On the Server (Kubernetes Server or using kubectl)
 
-### 4. Create Deployment YAML (deployment.yaml)
+### 4. Create Deployment YAML file manually (deployment.yaml)
 
 ```bash
 nano deployment.yaml
+```
+
+### Then copy and paste the deployment YAML content from this file:
+
+[deployment.yaml](https://github.com/shamodhas/k8s-simple-deployment/blob/main/deployment.yaml)
+
+### 5. Create Service YAML (service.yaml)
+
+Create the `service.yaml` file manually:
+
+```bash
+nano service.yaml
+```
+
+### Then copy and paste the service YAML content from this file:
+
+[service.yaml](https://github.com/shamodhas/k8s-simple-deployment/blob/main/service.yaml)
+
+### 6. Deploy to Kubernetes
+
+```bash
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+```
+### 7. Verify Deployment
+
+```bash
+kubectl get deployments
+kubectl get pods
+kubectl get svc
+```
+
+### 8. Access Your App
+
+#### If your environment does not support LoadBalancer, edit service.yaml:
+
+```bash
+type: NodePort
+ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+    nodePort: 30080
+```
+
+#### Redeploy service and access via:
+
+```bash
+http://<server-ip>:30080
+```
+
+### 9. Update App Manually
+
+```bash
+kubectl set image deployment/vps-app vps-app=shamodha/vps-app:latest
+kubectl rollout status deployment/vps-app
+```
+
+### 10. Scale Pods Manually
+
+```bash
+kubectl scale deployment vps-app --replicas=3
+```
+
+### 11. Configure Auto-Scaling
+
+```bash
+kubectl autoscale deployment vps-app --cpu-percent=50 --min=2 --max=5
+kubectl get hpa
+```
+
+### 12. Clean Up (Optional)
+
+```bash
+kubectl delete deployment vps-app
+kubectl delete service vps-service
+kubectl get all
+docker rmi shamodha/vps-app:latest
 ```

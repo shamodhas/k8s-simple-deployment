@@ -13,7 +13,7 @@ spec:
         app: vps-app
     spec:
       containers:
-      - name: vps-app
-        image: shamodha/vps-app:latest
-        ports:
-        - containerPort: 8080
+        - name: vps-app
+          image: shamodha/vps-app:latest
+          ports:
+            - containerPort: 8080
