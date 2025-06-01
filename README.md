@@ -6,20 +6,22 @@
 
 **A hands-on guide for deploying Spring Boot applications to Kubernetes (K3s) with manual steps and verification**
 
-## Kubernetes Workflow
+---
 
-1. Push Docker image to Docker Hub.
-2. Kubernetes API receives cluster requests.
-3. Scheduler assigns workload to appropriate nodes.
-4. Kubelet pulls and runs containers.
-5. Pods & Services expose app networking.
-6. Auto-scaling & monitoring adjust resources based on traffic.
+## 🛠️ Kubernetes Workflow
+
+1. **Push Docker image to Docker Hub.**
+2. **Kubernetes API receives cluster requests.**
+3. **Scheduler assigns workload to appropriate nodes.**
+4. **Kubelet pulls and runs containers.**
+5. **Pods & Services expose app networking.**
+6. **Auto-scaling & monitoring adjust resources based on traffic.**
 
 ---
 
-## Kubernetes Installation (First Time Server Setup)
+## 🚀 Kubernetes Installation (First Time Server Setup)
 
-### Install kubectl CLI
+### 1. Install kubectl CLI
 
 ```bash
 sudo apt update
@@ -29,14 +31,14 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl version --client
 ```
 
-### Install K3s (Lightweight Kubernetes)
+### 2. Install K3s (Lightweight Kubernetes)
 
 ```bash
 curl -sfL https://get.k3s.io | sh -
 sudo systemctl status k3s
 ```
 
-### Configure kubeconfig
+### 3. Configure kubeconfig
 
 ```bash
 mkdir -p ~/.kube
@@ -44,47 +46,51 @@ sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 sudo chown $(whoami):$(whoami) ~/.kube/config
 ```
 
-### Verify cluster
+### 4. Verify Cluster
 
 ```bash
 kubectl get nodes
 ```
 
-## Manual Deployment Steps for Spring Boot App
+---
 
-## On your local computer
-### 1. Package Spring Boot app
+## 📦 Manual Deployment Steps for Spring Boot App
+
+### On your local computer
+
+#### 1. Package Spring Boot app
 
 ```bash
 mvn clean package
 ```
 
-### 2. Build Docker Image
+#### 2. Build Docker Image
 
 ```bash
 docker build -t shamodha/vps-app:latest .
 ```
 
-### 3. Login Docker Hub and Push Image
+#### 3. Login Docker Hub and Push Image
 
 ```bash
 docker login
 docker push shamodha/vps-app:latest
 ```
 
-## On the Server (Kubernetes Server or using kubectl)
+---
 
-### 4. Create Deployment YAML file manually (deployment.yaml)
+### On the Server (Kubernetes Server or using kubectl)
+
+#### 4. Create Deployment YAML file manually (`deployment.yaml`)
 
 ```bash
 nano deployment.yaml
 ```
 
-### Then copy and paste the deployment YAML content from this file:
-
+Then copy and paste the deployment YAML content from this file:  
 [deployment.yaml](https://github.com/shamodhas/k8s-simple-deployment/blob/main/deployment.yaml)
 
-### 5. Create Service YAML (service.yaml)
+#### 5. Create Service YAML (`service.yaml`)
 
 Create the `service.yaml` file manually:
 
@@ -92,17 +98,17 @@ Create the `service.yaml` file manually:
 nano service.yaml
 ```
 
-### Then copy and paste the service YAML content from this file:
-
+Then copy and paste the service YAML content from this file:  
 [service.yaml](https://github.com/shamodhas/k8s-simple-deployment/blob/main/service.yaml)
 
-### 6. Deploy to Kubernetes
+#### 6. Deploy to Kubernetes
 
 ```bash
 kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 ```
-### 7. Verify Deployment
+
+#### 7. Verify Deployment
 
 ```bash
 kubectl get deployments
@@ -110,9 +116,9 @@ kubectl get pods
 kubectl get svc
 ```
 
-### 8. Access Your App
+#### 8. Access Your App
 
-#### If your environment does not support LoadBalancer, edit service.yaml:
+If your environment does not support LoadBalancer, edit `service.yaml`:
 
 ```bash
 type: NodePort
@@ -123,33 +129,33 @@ ports:
     nodePort: 30080
 ```
 
-#### Redeploy service and access via:
+Redeploy service and access via:
 
 ```bash
 http://<server-ip>:30080
 ```
 
-### 9. Update App Manually
+#### 9. Update App Manually
 
 ```bash
 kubectl set image deployment/vps-app vps-app=shamodha/vps-app:latest
 kubectl rollout status deployment/vps-app
 ```
 
-### 10. Scale Pods Manually
+#### 10. Scale Pods Manually
 
 ```bash
 kubectl scale deployment vps-app --replicas=3
 ```
 
-### 11. Configure Auto-Scaling
+#### 11. Configure Auto-Scaling
 
 ```bash
 kubectl autoscale deployment vps-app --cpu-percent=50 --min=2 --max=5
 kubectl get hpa
 ```
 
-### 12. Clean Up (Optional)
+#### 12. Clean Up (Optional)
 
 ```bash
 kubectl delete deployment vps-app
