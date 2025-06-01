@@ -1,5 +1,11 @@
 # Kubernetes Practical Guide: Manual Deployment of Spring Boot App
 
+![Kubernetes](https://img.shields.io/badge/Kubernetes-v1.25+-326CE5?logo=kubernetes) 
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1+-6DB33F?logo=springboot)
+![Docker](https://img.shields.io/badge/Docker-24.0+-2496ED?logo=docker)
+
+**A hands-on guide for deploying Spring Boot applications to Kubernetes (K3s) with manual steps and verification**
+
 ## Kubernetes Workflow
 
 1. Push Docker image to Docker Hub.
